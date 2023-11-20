@@ -1,0 +1,51 @@
+﻿@using EntityLayer.Concrete
+@model List<Notification>
+@{
+    ViewData["Title"] = "AllNotification";
+    Layout = "~/Views/Shared/WriterLayout.cshtml";
+}
+
+<h1>AllNotification</h1>
+
+<table class="table table-bordered">
+    <tr>
+        <th>#</th>
+        <th>Bildirim</th>
+        <th>Tarih</th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.NotificationID</td>
+            <td>@item.NotificationDetails</td>
+            @* <td>@item.NotificationDate.ToShortDateString()</td> *@
+            @{
+                DateTime notificationDate = item.NotificationDate;
+                TimeSpan elapsed = DateTime.Now - notificationDate;
+
+                if (elapsed.TotalDays >= 365)
+                {
+                    int years = (int)(elapsed.TotalDays / 365);
+                    <td>@($"{years} yıl önce")</td>
+                }
+                else if (elapsed.TotalDays >= 30)
+                {
+                    int months = (int)(elapsed.TotalDays / 30);
+                    <td>@($"{months} ay önce")</td>
+                }
+                else if (elapsed.TotalDays >= 1)
+                {
+                    <td>@($"{(int)elapsed.TotalDays} gün önce")</td>
+                }
+                else if (elapsed.TotalHours >= 1)
+                {
+                    <td>@($"{(int)elapsed.TotalHours} saat önce")</td>
+                }
+                else
+                {
+                    <td>@($"{(int)elapsed.TotalMinutes} dakika önce")</td>
+                }
+            }
+        </tr>
+    }
+</table>
