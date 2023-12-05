@@ -1,18 +1,63 @@
-﻿<nav class="sidebar sidebar-offcanvas" id="sidebar">
+﻿@using DataAccessLayer.Concrete
+@using EntityLayer.Concrete
+@inject Microsoft.AspNetCore.Identity.UserManager<AppUser> UserManager
+@inject Context dbContext
+@{
+    var userName = User.Identity.Name;
+    var user = await UserManager.FindByNameAsync(userName);
+}
+<nav class="sidebar sidebar-offcanvas" id="sidebar">
     <ul class="nav">
         <li class="nav-item nav-profile">
             <a href="#" class="nav-link">
                 <div class="nav-profile-image">
-                    <img src="~/writer/assets/images/faces/face1.jpg" 
-                    alt="profile">
+                    @if (User.Identity.Name != null)
+                    {
+                       
+                        if (user != null && user.ImageUrl.Length != 0)
+                        {                           
+                            <img src="@user.ImageUrl"
+                                 alt="asd">
+                        }else
+                        {
+                             <img src="~/writer/assets/images/faces/face1.jpg"
+                    alt="profile"> 
+                        }
+                    }                  
                     <span class="login-status online"></span>
                     <!--change to offline or busy as needed-->
                 </div>
                 <div class="nav-profile-text d-flex flex-column">
-                    <span class="font-weight-bold mb-2">İbrahim Öztürk</span>
-                    <span class="text-secondary text-small">Proje Müdürü</span>
+                    <span class="font-weight-bold mb-2">
+                        @if (User.Identity.Name != null)
+                        {
+                           
+                            if (user != null)
+                            {
+                                @user.NameSurname
+                            }
+                        }
+                    </span>
+                    <span class="text-secondary text-small">
+                        @if (User.Identity.Name != null)
+                        {
+                           
+
+                            if (user != null)
+                            {
+                                var writer = dbContext.Writers.FirstOrDefault(w => w.WriterID == user.Id);
+
+                                if (writer != null)
+                                {
+                                    @writer.WriterAbout
+                                }
+                            }
+                        }
+                       @*  Proje Müdürü *@
+                        
+                    </span>
                 </div>
-                <i class="mdi mdi-bookmark-check text-success nav-profile-badge"></i>
+              
             </a>
         </li>
         <li class="nav-item">
@@ -41,7 +86,7 @@
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="/Writer/WriterMessage/">
+            <a class="nav-link" href="/Message/InBox/">
                 <span class="menu-title">Mesajlar</span>
                 <i class="mdi mdi-message menu-icon"></i>
             </a>
@@ -65,7 +110,7 @@
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="/Login/WriterLoOut/">
+            <a class="nav-link" href="/Login/LogOut/">
                 <span class="menu-title">Çıkış Yap</span>
                 <i class="mdi mdi-logout menu-icon"></i>
             </a>

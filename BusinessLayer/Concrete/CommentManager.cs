@@ -23,9 +23,39 @@ namespace BusinessLayer.Concrete
 			_commentdal.Insert(comment);
 		}
 
-		public List<Comment> GetList(int id)
+        public List<Comment> GetCommentListWithBlog()
+        {
+            return _commentdal.GetListWithBlog();
+        }
+
+        public List<Comment> GetList(int id)
 		{
 			return _commentdal.GetListAll(x=>x.BlogID==id);
 		}
-	}
+
+        public List<Comment> GetList()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void TAdd(Comment t)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void TDelete(Comment t)
+        {
+            _commentdal.Delete(t);
+        }
+
+        public Comment TGetById(int id)
+        {
+            return _commentdal.GetById(id);
+        }
+
+        public void TUpdate(Comment t)
+        {
+            _commentdal.Update(t);
+        }
+    }
 }

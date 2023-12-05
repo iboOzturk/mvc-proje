@@ -1,0 +1,18 @@
+﻿@model deneme.Controllers.Class1
+@{
+    ViewData["Title"] = "EditEmployee";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+<h1>Personel Güncelleme(API ile)</h1>
+<form method="post">
+    <label>ID</label>
+    @Html.TextAreaFor(x => x.Id, new { @class = "form-control" })
+    <br />
+
+    <label>Çalışan Adı Soyadu</label>
+    @Html.TextAreaFor(x => x.Name, new { @class = "form-control" })
+
+    <br />
+    <button type="submit" class="btn btn-success">Güncelle</button>
+</form>

@@ -1,0 +1,65 @@
+﻿@using EntityLayer.Concrete
+@model List<MessageTwo>
+
+@{
+    ViewData["Title"] = "InBox";
+    Layout = "~/Views/Shared/WriterLayout.cshtml";
+}
+<h1>Gelen Kutusu</h1>
+@{if (Model.Count!=0)
+{
+    <table class="table table-bordered">
+        <tr>
+            <th>#</th>
+            <th>Konu</th>
+            <th>Gönderen</th>
+            <th>Tarih</th>
+            <th>Mesajı Aç</th>
+
+        </tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <th>@item.MessageID</th>
+                <td>@item.Subject</td>
+                <td>@item.SenderUser.WriterName</td>
+                @* <td>@(((DateTime)item.MessageDate).ToString("dd MMM yyyy"))</td>              *@
+                @{
+                    DateTime messageDate = item.MessageDate;
+                    TimeSpan elapsed = DateTime.Now - messageDate;
+
+                    if (elapsed.TotalDays >= 365)
+                    {
+                        int years = (int)(elapsed.TotalDays / 365);
+                        <td>@($"{years} yıl önce")</td>
+                    }
+                    else if (elapsed.TotalDays >= 30)
+                    {
+                        int months = (int)(elapsed.TotalDays / 30);
+                        <td>@($"{months} ay önce")</td>
+                    }
+                    else if (elapsed.TotalDays >= 1)
+                    {
+                        <td>@($"{(int)elapsed.TotalDays} gün önce")</td>
+                    }
+                    else if (elapsed.TotalHours >= 1)
+                    {
+                        <td>@($"{(int)elapsed.TotalHours} saat önce")</td>
+                    }
+                    else
+                    {
+                        <td>@($"{(int)elapsed.TotalMinutes} dakika önce")</td>
+                    }
+                }
+                <td><a href="/Message/MessageDetails/@item.MessageID" class="btn btn-warning">Mesajı Aç</a></td>
+            </tr>
+        }
+    </table>
+    <a href="/Message/SendMessage/" class="btn btn-info">Yeni Mesaj Oluştur</a>
+    <a href="/Message/SendBox/" class="btn btn-info">Giden Mesajları Gör</a>
+}
+
+}@{else
+{
+  <h1>Mesajınız Yok</h1>  
+}}
